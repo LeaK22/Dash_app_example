@@ -27,8 +27,7 @@ data['NA_ITEM_UNIT'] = data['NA_ITEM'] + ' (' + data['UNIT'] + ')'
 available_indicators = data['NA_ITEM_UNIT'].unique()
 available_countries= data['GEO'].unique()
 
-app.layout = 
-html.Div([
+app.layout = html.Div([
     html.Div([
         html.Div([
 
