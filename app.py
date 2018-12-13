@@ -27,22 +27,22 @@ data['NA_ITEM_UNIT'] = data['NA_ITEM'] + ' (' + data['UNIT'] + ')'
 available_indicators = data['NA_ITEM_UNIT'].unique()
 available_countries= data['GEO'].unique()
 
-app.layout = html.Div([
+app.layout= html.Div([
     html.Div([
         html.Div([
-
+        
             html.Div([
                 dcc.Dropdown(
                     id='xaxis-column1',
                     options=[{'label': i, 'value': i} for i in available_indicators],
-                    value='Gross domestic product at market prices'
+                    value=available_indicators[0]
                 )],
             style={'width': '48%', 'display': 'inline-block'}), 
             html.Div([
                 dcc.Dropdown(
                     id='yaxis-column1',
                     options=[{'label': i, 'value': i} for i in available_indicators],
-                    value='Final consumption expenditure'
+                    value=available_indicators[0]
                 )],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
         ]),
 
@@ -58,7 +58,6 @@ app.layout = html.Div([
     ]), 
     html.Div([
         html.Div([
-
             html.Div([
                 html.P(
                     children = 'Select a country:',
@@ -67,7 +66,7 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='country2',
                     options=[{'label': i, 'value': i} for i in available_countries],
-                    value='Spain'
+                    value=available_countries[0]
                 )],
             style={'width': '48%', 'display': 'inline-block'}), 
 
@@ -79,7 +78,7 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='yaxis-column2',
                     options=[{'label': i, 'value': i} for i in available_indicators],
-                    value='Final consumption expenditure'
+                    value=available_indicators[0]
                 )],style={'width': '48%', 'float': 'right', 'display': 'inline-block'}
                 ), 
 
@@ -132,11 +131,11 @@ def update_graph(xaxis_column_name, yaxis_column_name,
 
 def update_graph(country_name, yaxis_column_name):
     
-    dff = data 
+    dff = data[data['GEO'] == country_name]
     
     return {
         'data': [go.Scatter(
-            x=dff[dff['GEO'] == country_name]['Value'],
+            x=dff['TIME'].unique(),
             y=dff[dff['NA_ITEM_UNIT'] == yaxis_column_name]['Value'],
             mode='lines',
             marker={
@@ -146,9 +145,6 @@ def update_graph(country_name, yaxis_column_name):
             }
         )],
         'layout': go.Layout(
-            xaxis={
-                'title': country_name,
-            },
             yaxis={
                 'title': yaxis_column_name,
             },
